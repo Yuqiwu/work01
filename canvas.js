@@ -1,44 +1,43 @@
 var box = document.getElementById("box")
+var ctx = box.getContext("2d")
 var c = document.getElementById("clear")
 var t = document.getElementById("toggle")
 var cond = 0;
 
-var ctx = box.getContext("2d")
-
 var clear = function(e){
     ctx.clearRect(0, 0, 500, 500);
-    console.log("clear")
-};
+    console.log("clear");
+}
 
 var toggle = function(e){
-    if (cond = 0){
+    if (cond == 0){
 	cond = 1;
-    };
+    }
     else{
 	cond = 0;
-    };
-    console.log(cond)
-};
+    }
+    console.log(cond);
+}
 
 var draw = function(e){
     ctx.fillStyle = "red";
-    ctx.beginPath();
-    if (cond = 0){
-	ctx.arc(e.clientX, e.clientY, 50, 0, 2 * Math.PI);
+    if (cond == 0){
+	ctx.beginPath();
+	ctx.arc(e.clientX - 8, e.clientY - 51, 15, 0, 2 * Math.PI);
 	ctx.stroke();
 	ctx.fill();
-	console.log("draw a circle")
-    };
+	console.log("draw a circle");
+    }
     else{
-	ctx.rect(e.clientX, e.clientY, 50, 50);
-	ctx.stroke();
-	ctx.fill();
-	console.log("draw a circle")
-    };
-};
+	ctx.fillRect(e.clientX - 23, e.clientY - 66, 30, 30);
+	console.log("draw a rectangle");
+    }
+    console.log("x = " + e.clientX);
+    console.log("y = " + e.clientY);
+}
 
 
 
-c.addEventListerner("clear", click);
-t.addEventListerner("toggle", click);
-box.addEventListerner("draw", click);
+c.addEventListener("click", clear);
+t.addEventListener("click", toggle);
+box.addEventListener("click", draw);
