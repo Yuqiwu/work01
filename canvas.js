@@ -1,44 +1,45 @@
-var box = document.getElementById("box")
-var c = document.getElementById("clear")
-var t = document.getElementById("toggle")
-var cond = 0;
+var box = document.getElementById("box");
+var ctx = box.getContext("2d");
+var stop = document.getElementById("stop");
+var requestID;
 
-var ctx = box.getContext("2d")
 
-var clear = function(e){
+ctx.fillStyle = "red";
+
+var clear = function(){
     ctx.clearRect(0, 0, 500, 500);
-    console.log("clear")
+}
+
+var stop = function(){
+    window.cancelAnimationFrame( requestID );
 };
 
-var toggle = function(e){
-    if (cond = 0){
-	cond = 1;
-    };
-    else{
-	cond = 0;
-    };
-    console.log(cond)
-};
-
-var draw = function(e){
-    ctx.fillStyle = "red";
-    ctx.beginPath();
-    if (cond = 0){
-	ctx.arc(e.clientX, e.clientY, 50, 0, 2 * Math.PI);
-	ctx.stroke();
+var draw = function(){
+    r = 0;
+    if (r == 250){
+	shrink();
+    }
+    if (r == 0){
+	grow();
+    }
+    window.cancelAnimationFrame( requestID );
+    var grow = function(){
+	clear();
+	ctx.beginPath();
+	ctx.arc(250, 250, x, 0, 2 * Math.PI);
 	ctx.fill();
-	console.log("draw a circle")
-    };
-    else{
-	ctx.rect(e.clientX, e.clientY, 50, 50);
-	ctx.stroke();
+	x++;
+    }
+    var shrink = function(){
+	clear();
+	ctx.beginPath();
+	ctx.arc(250, 250, x, 0, 2 * Math.PI);
 	ctx.fill();
-	console.log("draw a circle")
-    };
+	x--;
+    }
 };
 
 
 
-c.addEventListerner("clear", click);
-t.addEventListerner("toggle", click);
-box.addEventListerner("draw", click);
+stop.addEventListener("click", stop);
+box.addEventListener("click", draw);
