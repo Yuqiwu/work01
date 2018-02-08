@@ -1,8 +1,12 @@
 var box = document.getElementById("box");
 var ctx = box.getContext("2d");
-var stop = document.getElementById("stop");
+var stopit = document.getElementById("stop");
+var startit = document.getElementById("start");
 var requestID;
-
+var stat = true;
+var r = 0;
+var oldr = 0;
+var cont = false;
 
 ctx.fillStyle = "red";
 
@@ -11,34 +15,58 @@ var clear = function(){
 }
 
 var stop = function(){
+    oldr = r;
+    cont = true;
     window.cancelAnimationFrame( requestID );
+}
+
+var stop2 = function(){
+    window.cancelAnimationFrame( requestID );
+}
+
+var start = function(){
+    draw();
 }
 
 var draw = function(){
-    r = 0;
-    if (r == 250){
-	shrink();
+    stop2();
+    if (cont == true){
+	r = oldr;
+	cont = false;
     }
-    if (r == 0){
-	grow();
+    else{
+	oldr = 0;
+	r = 0;
     }
-    window.cancelAnimationFrame( requestID );
-    var grow = function(){
+    
+    var animate = function(){
 	clear();
 	ctx.beginPath();
-	ctx.arc(250, 250, x, 0, 2 * Math.PI);
+	ctx.arc(250, 250, r, 0, 2 * Math.PI);
+	status();
+	requestID = window.requestAnimationFrame(animate);
 	ctx.fill();
-	x++;
     }
-    var shrink = function(){
-	clear();
-	ctx.beginPath();
-	ctx.arc(250, 250, x, 0, 2 * Math.PI);
-	ctx.fill();
-	x--;
+    
+    var status = function(){
+	if (stat == true){
+	    r++;
+	    if (r > 250){
+		stat = false;
+	    }
+	}
+	else{
+	    r--;
+	    if (r < 1){
+		stat = true;
+	    }
+	}
     }
+    
+    animate();
 }
 
-stop.addEventListener("click", stop);
+stopit.addEventListener("click", stop);
+startit.addEventListener("click", start);
 box.addEventListener("click", draw);
 
